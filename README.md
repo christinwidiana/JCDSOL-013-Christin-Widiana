@@ -10,8 +10,8 @@
      Pada sub menu ini *user* dapat menfilter data karyawan yang ingin ditampilkan sesuai dengan kebutuhan.
      Misal : Jika *user* hanya ingin menampilkan karyawan yang memiliki jabatan atau gender tertentu, dapat dilakukan pada
      menu ini.
-  4.Kembali ke main menu :
-    Pada sub menu ini dapat *user* gunakan untuk kembali ke tampilan main menu.
+  4. Kembali ke main menu :
+     Pada sub menu ini dapat *user* gunakan untuk kembali ke tampilan main menu.
 ## Main Menu 2 : Menambahkan Data Karyawan
    Pada main menu 2 ini *user* dapat menambahkan data karyawan baru
 ## Main Menu 3 : Mengubah Data Karyawan
