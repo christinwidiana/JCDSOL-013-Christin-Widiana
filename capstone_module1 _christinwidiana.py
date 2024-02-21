@@ -1,117 +1,162 @@
-                                                                                             #Capstone Project   : Module 1
-                                                                                             #Case Study         : Data Karyawan Perusahaan
-                                                                                             #Nama               : Christin Widiana
-                                                                                             #Kelas              : JCDSOL-013-2-Online
 
-#Data Daftar Karyawan PT.ABC -> menggunakan list of dictionary 
+#Capstone Project   : Module 1
+#Case Study         : Data Karyawan Perusahaan
+#Nama               : Christin Widiana
+#Kelas              : JCDSOL-013-2-Online
 
-daftar_karyawan = [
-    {'ID' : 'ABC001',
-     'Nama' : 'Della',
-     'Gender' : 'Perempuan',
-     'Alamat' : 'Dago',
-     'Email' : 'della@gmail.com',
-     'Jabatan' : 'Staff',
-     },
-    {'ID' : 'ABC002',
-     'Nama' : 'Galih',
-     'Gender' : 'Laki-laki',
-     'Alamat' : 'Cibaduyut',
-     'Email' : 'galih@gmail.com',
-     'Jabatan' : 'SPV',
-     },
-    {'ID' : 'ABC003',
-     'Nama' : 'Erni',
-     'Gender' : 'Perempuan',
-     'Alamat' : 'Buah Batu',
-     'Email' : 'erni@gmail.com',
-     'Jabatan' : 'Manager',
-     },
-]
+import os
+import colorama
+from colorama import init, Fore,Back,Style
+from tabulate import tabulate
 
-#function untuk menampilkan data karyawan secara keseluruhan
+# Inisialisasi colorama
+init(autoreset=True)
+
+# Untuk membersihkan layar
+os.system('cls')
+
+# Inisialisasi daftar_karyawan  - dengan membuat list kosong
+daftar_karyawan = []
+
+# Function untuk menampilkan data karyawan secara keseluruhan
 def tampilkan_data_karyawan (daftar_karyawan):
-    print ('Daftar Data Karyawan PT.ABC') #judul tabel
-
-    #cetak bagian header tabel
-    print (f"{'ID':<8} | {'Nama':<10} | {'Gender':<10} | {'Alamat':<20} | {'Email' :<20} | {'Jabatan':<10}")
-    print ("_" *95)
-
-    #cetak bagian isi tabel
-    for karyawan in (daftar_karyawan):
-        print(f"{karyawan['ID']:<8} | {karyawan['Nama']:<10} | {karyawan['Gender']:<10} | {karyawan['Alamat']:<20} | {karyawan['Email'] :<20} | {karyawan['Jabatan']:<10}")
-
-#function untuk mencari data karyawan dengan menggunakan ID Karyawan tertentu 
-def cari_karyawan(daftar_karyawan,cari_id): #fungsi cari_karyawan dng menggunakan 2 parameter yt daftar_karyawan & cari_id
-    for karyawan in daftar_karyawan: #akan ditelusuri apakan id yg dicari terdapat pada daftar karyawan
-        if karyawan['ID']== cari_id:
-            return karyawan #mengembalikan nilai ke karyawan apabila data yang dicari ditemukan
-    return None #mengembalikan nilai kosong jika data yang dicari tidak ditemukan
+    # Cek jika daftar karyawan kosong
+    if not daftar_karyawan :
+        print(Fore.RED +'Daftar karyawan kosong.')
+        return # keluar dari fungsi
     
-#function untuk menampilkan data karyawan berhasil ditemukan
-def data_berhasil_ditemukan (hasil_cari):
-    if hasil_cari:
-        print ("Data karyawan berhasil ditemukan")
-        #cetak bagian header tabel
-        print (f"{'ID':<8} | {'Nama':<10} | {'Gender':<10} | {'Alamat':<20} | {'Email':<20} | {'Jabatan':<10}")
-        print ("_" *95)
-        #cetak bagian isi tabel
-        #for karyawan in (daftar_karyawan):
-        print(f"{hasil_cari['ID']:<8} | {hasil_cari['Nama']:<10} | {hasil_cari['Gender']:<10} | {hasil_cari['Alamat']:<20} | {hasil_cari['Email']:<20} | {hasil_cari['Jabatan']:<10}")
-    else:
-        print(" ID karyawan tidak ditemukan")
+    # Jika daftar karyawan tidak kosong
+    print (Back.BLUE +'Daftar Data Karyawan PT.ABC') #judul tabel
 
-#sub menu 1 menampilkan tabel data karyawan
+    # Menampung header dari kunci data karyawan
+    headers=daftar_karyawan[0].keys()
+
+    # Menampung semua nilai dari data karyawan
+    data=[karyawan.values() for karyawan in daftar_karyawan]
+
+    # Menampilkan tabel data karyawan dengan menggunakan format grid
+    print(tabulate(data, headers=headers, tablefmt="grid"))
+
+# Fungsi untuk menampilkan data key tertentu
+def tampilkan_data_key_tertentu(daftar_karyawan):
+    # Cek jika daftar karyawan kosong
+    if not daftar_karyawan: 
+        print(Fore.RED + "Daftar karyawan kosong.")
+        return
+    
+# Jika isi tidak kosong, maka akan meminta input key
+    while True:
+        # Meminta user memasukkan key yang diinginkan
+        key_dipilih = input("Masukkan key data karyawan yang ingin ditampilkan (ID, Nama, Gender, Alamat, Email, Jabatan)' \n atau ketik 'Batal' untuk membatalkan: ").capitalize()
+        
+        # Jika user memilih opsi untuk membatalkan
+        if key_dipilih == 'Batal':
+            print(Fore.RED + "Operasi dibatalkan.")
+            return
+        
+        # Memeriksa apakah key ada di daftar_karyawan
+        if key_dipilih in daftar_karyawan[0]:
+
+            # Mengumpulkan data berdasarkan key yang dipilih
+            data = [[karyawan.get(key_dipilih, "N/A")] for karyawan in daftar_karyawan]
+            
+            # Menampilkan data karyawan dengan tabulate
+            print(tabulate(data, headers=[key_dipilih], tablefmt="grid"))
+            break
+        else:
+            print(Fore.RED + "Key yang dimasukkan tidak valid.\nSilakan coba lagi atau ketik 'Batal' untuk membatalkan.")
+
+# Function untuk menampilkan data karyawan berdasarkan filter yang dipilih
+def filter_data_karyawan(daftar_karyawan):
+    # Cek jika daftar karyawan kosong
+    if not daftar_karyawan:
+        print(Fore.RED +"Daftar karyawan kosong.")
+        return
+    
+  
+    while True:
+        key_dipilih = input("Masukkan key data karyawan yang ingin ditampilkan (ID, Nama, Gender, Alamat, Email, Jabatan)'\natau ketik 'Batal' untuk membatalkan: ").capitalize()
+    
+        # Jika user memilih opsi untuk membatalkan
+        if key_dipilih == 'Batal':
+            print(Fore.RED + "Operasi dibatalkan.")
+            return # Keluar dari fungsi
+         
+        # Memeriksa apakah key ada di daftar_karyawan
+        if key_dipilih in daftar_karyawan[0]: # Jika key valid
+ 
+            # Meminta input untuk nilai berdasarkan key yang dipilih
+            value_dipilih = input(f"Masukkan value dari {key_dipilih} : ").lower()
+    
+            # Mencari karyawan yang sesuai dengan kriteria
+            hasil_kriteria = [karyawan for karyawan in daftar_karyawan if karyawan.get(key_dipilih).lower() == value_dipilih]
+    
+            # Jika data data karyawan ditemukan berdasarkan kriteria tsb
+            if hasil_kriteria:
+
+                # Mengumpulkan data untuk ditampilkan
+                data = [[karyawan[key] for key in karyawan] for karyawan in hasil_kriteria]
+                headers = hasil_kriteria[0].keys()
+        
+                # Menampilkan data dengan tabulate
+                print(f"Menampilkan karyawan dengan {key_dipilih} = {value_dipilih}:")
+                print(tabulate(data, headers=headers, tablefmt="grid"))
+                break
+            else:
+                print(Fore.RED + f"Tidak ada karyawan dengan {key_dipilih} = {value_dipilih}.")
+        
+        else:
+            print(Fore.RED + "Key yang dimasukkan tidak valid.\nSilakan coba lagi atau ketik 'Batal' untuk membatalkan.")
+    
+
+# sub menu 1 menampilkan tabel data karyawan
 def sub_menu1():
     while True:
         print(''' 
 _______________________________________________________________________________________________
 Sub Menu Menampilkan Data Karyawan PT.ABC:
-1. Tampilkan Data Karyawan
-2. Mencari Data Karyawan
-3. Kembali Ke Main Menu
+1. Menampilkan Seluruh Data Karyawan
+2. Menampilkan Data Key tertentu
+3. Memfilter Data Karyawan
+4. Kembali Ke Main Menu
 _______________________________________________________________________________________________
 ''')
-        pilihan_submenu1 = input('Silakan pilih menu yang akan dijalankan [1-3] : ')
-        if pilihan_submenu1 == '1': #menu untuk menampilkan keseluruhan data karyawan yang ada
+        pilihan_submenu1 = input(Style.RESET_ALL +'Silakan pilih sub menu yang akan dijalankan [1-4] : ')
+        if pilihan_submenu1 == '1': # Menu untuk menampilkan keseluruhan data karyawan yang ada
             tampilkan_data_karyawan (daftar_karyawan)
-        elif pilihan_submenu1 == '2': #untuk menampilkan data karyawan secara spesifik berdasarkan id karyawan yang ingin ditampilkan
-            if len(daftar_karyawan) == 0: #jika kondisi data karyawan kosong
-                print('Data karyawan tidak ditemukan')
-            else:
-                tampilkan_data_karyawan(daftar_karyawan)
-                id_karyawan =input('Silakan input ID Karyawan yang dicari [ex : ABC001] : ')
-                hasil_cari = cari_karyawan (daftar_karyawan,id_karyawan)
-                data_berhasil_ditemukan (hasil_cari)
-       
-        elif pilihan_submenu1 == '3':
-            break #keluar dr loop dan kembali ke main menu
+        elif pilihan_submenu1 == '2': # Menu untuk menampilkan data sesuai dengan atribut 
+            tampilkan_data_key_tertentu(daftar_karyawan)
+        elif pilihan_submenu1 == '3': # Menu untuk menampilkan filter data karyawan 
+            filter_data_karyawan(daftar_karyawan) 
+        elif pilihan_submenu1 == '4':
+            break # Keluar dr loop dan kembali ke main menu
         else:
-            print('Silakan pilih menu dari 1-3')
+            print(Fore.RED + 'Sub menu tidak valid.\nSilakan pilih menu dari [1-4]')
 
-#function untuk menambah data karyawan baru
+# Function untuk menambah data karyawan baru
 def tambah_karyawan(daftar_karyawan):
     while True :
-        id_baru=input('Masukkan ID Karyawan Baru [ABC001]: ') # meminta input dari user untuk memasukkan id karyawan baru sebanyak 6 digit
+        # meminta input dari user untuk memasukkan id karyawan baru sebanyak 6 digit
+        id_baru=input(Fore.GREEN + 'Masukkan ID Karyawan Baru [ABC001]: ').upper() 
         
-        #cek apakah id yang diinput memenuhi syarat 6 digit
+        # Cek apakah id yang diinput memenuhi syarat 6 digit
         if(len(id_baru)!=6):
-           print('ID Karyawan Wajib 6 Digit. Silakan coba input ID baru')
-           continue #skip prose lain didalam loop lsg minta ID baru
+           print(Fore.RED + Style.BRIGHT +'ID Karyawan Wajib 6 Digit.\nSilakan coba input ID baru')
+           continue # Skip proses lain didalam loop lsg minta ID baru
 
-        #cek apakah ada duplikasi ID
+        # Cek apakah ada duplikasi ID
         if any (karyawan['ID'] == id_baru for karyawan in daftar_karyawan):
-           print('ID tersebut sudah terpakai. Silakan coba input ID lain')
-           continue #skip proses lain didalam loop lsg minta ID baru
+           print(Fore.RED + Style.BRIGHT + 'ID tersebut sudah terpakai.\nSilakan coba input ID lain')
+           continue # Skip proses lain didalam loop lsg minta ID baru
 
-        #jika ID sudah memenuhi syarat (dipastikan sudah 6 digit dan tdk ada duplikasi) maka lanjut keproses input data lainnya
+        # Jika ID sudah memenuhi syarat maka lanjut keproses input data lainnya
         nama = input ('Input Nama Karyawan Baru :').capitalize()
         gender = input ('Input Gender Karyawan Baru [Perempuan / Laki-laki] : ').capitalize()
         alamat = input ('Input Alamat Karyawan Baru : ').capitalize()
         email = input ('Input Email Karyawan Baru : ')
         jabatan = input ('Input Jabatan Karyawan Baru : ').capitalize()
 
-        konfirmasi = input ('Apakah data akan disimpan [Y/N] : ').capitalize()
+        konfirmasi = input (Fore.YELLOW + Style.BRIGHT +'Apakah data akan disimpan [Y/N] : ').capitalize()
 
         if konfirmasi=='Y' :
             # Data karyawan baru tersebut akan digabungkan menjadi sebuah dictionary
@@ -124,76 +169,91 @@ def tambah_karyawan(daftar_karyawan):
                 'Jabatan':jabatan
             }
 
-            #menambahkan data tersebut kedalam list
+            # Menambahkan data tersebut kedalam list
             daftar_karyawan.append(data_baru)
-            print ('Data karyawan berhasil ditambahkan')
-            break #keluar dari loop setelah berhasil menambahkan data karyawann baru
+            print (Fore.GREEN + Style.BRIGHT +'Data karyawan berhasil ditambahkan')
+            break # Keluar dari loop setelah berhasil menambahkan data karyawann baru
         else:
-            print ('Data baru tidak jadi disimpan. Silakan input data baru kembali.')
+            print (Fore.RED + Style.BRIGHT + 'Data baru tidak jadi disimpan.\nSilakan input data baru kembali.')
 
-#function update data karyawan
+# Function update data karyawan
 def update_karyawan (daftar_karyawan):
+    # Memeriksa apakah daftar karyawan kosong
+    if not daftar_karyawan:
+        print('Daftar karyawan kosong')
+        return
+    
+    # Jika daftar karyawan tidak kosong
     while True:
         id_karyawan = input ('Input ID karyawan yang akan diupate : ')
 
-        #mencari data karyawan berdasarkan ID yang diinput
-        #keluarkan nilai none jika tidak ditemukan
+        # Mencari data karyawan berdasarkan ID yang diinput
+        # Jika ID tidak ditemukan, maka karyawan akan menjadi none
         karyawan = next((k for k in daftar_karyawan if k['ID']==id_karyawan),None)
 
         if not karyawan :
-            print('ID karyawan tersebut tidak ditemukan')
-            continue #skip proses lainnya yang dan meminta user input ID karyawan lagi
+            print(Fore.RED + Style.BRIGHT + 'ID karyawan tersebut tidak ditemukan')
+            continue # Skip proses lainnya yang dan meminta user input ID karyawan lagi
         else:
-            break #keluar dari loop jika data ditemukan
+            break # Keluar dari loop jika data ditemukan
     while True:
-        print('Silakan pilih data yang akan diupdate : ID,Nama,Gender,Alamat,Email atau Jabatan')
-        key = input ('Input atribut yang akan diupdate : ')
+        print('Silakan pilih data yang akan diupdate \n[ex : ID,Nama,Gender,Alamat,Email atau Jabatan')
+        key = input ('Input atribut yang akan diupdate : ').capitalize()
 
-        #cek apakah atribut yang diinput bener
+        # Cek apakah atribut yang diinput bener
         if key not in karyawan :
-            print(f"Atribut '{key}' tidak ditemukan")
-            continue #skip proses lainnya dan meminta masukkan atribut kembali
+            print(Fore.RED + f"Atribut '{key}' tidak ditemukan")
+            continue # Skip proses lainnya dan meminta masukkan atribut kembali
         else :
-            break #keluar dari loop jika atribut benar
+            break # Keluar dari loop jika atribut benar
 
-    #minta data baru untuk atribut tersebut
-    nilai_baru = input(f"Input data baru untuk {key} :")
+    # Minta data baru untuk atribut tersebut
+    nilai_baru = input('Sialakn input nilai baru = ').capitalize()
 
-    #update data
+    # Update data
     karyawan [key] = nilai_baru
     print(f'Data {key} sudah diupdate menjadi {nilai_baru}')
 
 # Function untuk menghapus data
 def hapus_karyawan(daftar_karyawan):
+
+    # Memeriksa apakah daftar karyawan kosong
+    if not daftar_karyawan:
+        print(Fore.RED +'Daftar karyawan kosong')
+        return
+    
+    # Jika daftar karyawan tidak kosong
     while True:
-        id_karyawan=input('Masukkan ID Karyawan yang akan dihapus : ')
+        id_karyawan=input(Fore.YELLOW + Style.BRIGHT + 'Masukkan ID Karyawan yang akan dihapus : ')
         karyawan_ditemukan=False
         
         # Cari data karyawan
         for i,karyawan in enumerate(daftar_karyawan) :
             if karyawan['ID']==id_karyawan :
                 karyawan_ditemukan=True
+
                 # ID karyawan berhasil ditemukan
                 # Meminta konfirmasi penghapusan ke user
-                konfirmasi=input(f"Apakah Anda yakin ingin menghapus data karyawan {id_karyawan} [Y/N]: ").capitalize()
+                konfirmasi=input(Fore.YELLOW + Style.BRIGHT + f"Apakah Anda yakin ingin menghapus data karyawan {id_karyawan} [Y/N]: ").capitalize()
                 
                 if konfirmasi=='Y':
                     del daftar_karyawan[i]
-                    print(f"Data karyawan dengan ID {id_karyawan} telah dihapus")
-                    return # keluar dari function setelah menghapus data
+                    print(Fore.GREEN + Style.BRIGHT + f"Data karyawan dengan ID {id_karyawan} telah dihapus")
+                    return # Keluar dari function setelah menghapus data
                 else :
-                    print("Penghapusan data dibatalkan")
-                    break # keluar dari loop for
+                    print(Fore.RED + Style.BRIGHT + "Penghapusan data dibatalkan")
+                    break # Keluar dari loop for
             
-        # Bila ID tidak ditemukan/ salahh input maka akan menanyakan kembali ke user apakah ingin mencoba lagi atau tidak
+        # Bila ID tidak ditemukan/salah input maka akan menanyakan kembali ke user 
+        # Apakah user ingin mencoba lagi atau tidak
         if not karyawan_ditemukan:
-            print ("Karyawan dengan ID tersebut tidak ditemukan")
-        pilihan = input("Apakah Anda ingin mencoba lagi [Y/N]: ").capitalize()
+            print (Fore.RED + Style.BRIGHT + "Karyawan dengan ID tersebut tidak ditemukan")
+        pilihan = input(Fore.YELLOW + Style.BRIGHT +"Apakah Anda ingin mencoba lagi [Y/N]: ").capitalize()
         if pilihan!='Y' :
-            print("Penghapusan data dibatalkan")
-            return # keluar dari function
+            print(Fore.RED + Style.BRIGHT + "Penghapusan data dibatalkan")
+            return # Keluar dari function
         
-#main menu
+# Main Menu
 def main_menu () :
     while True:
         print(''' 
@@ -206,7 +266,7 @@ Main Menu Menampilkan Data Karyawan PT.ABC:
 5. Exit
 _______________________________________________________________________________________________
 ''')
-        #select main menu
+        # Select main menu
         select_menu = input ('Silakan pilihan menu yang akan dijalankan [1-5] : ')
         if select_menu == '1':
             sub_menu1()
@@ -218,10 +278,9 @@ ________________________________________________________________________________
             hapus_karyawan(daftar_karyawan)
         elif select_menu == '5' :
             print('Terima kasih, sampai jumpa kembali')
-            break #untuk keluar dari loop
+            break # Untuk keluar dari loop
         else :
-            print('Menu yang dipilih tidak valid, silakan pilih lagi')
-
+            print(Fore.RED + Style.BRIGHT + 'Menu yang dipilih tidak valid.\nSilakan pilih menu [1-5]')    
 main_menu()
 
 
